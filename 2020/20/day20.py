@@ -8,13 +8,12 @@ class Tile:
     down = None
     left = None
     right = None
+    deg = 0
+    neighbours_expanded = False
 
     def __init__(self, id, data):
         self.id = id
         self.data = data
-
-    def used_ids(self):
-        return [x.id for x in [self.up, self.down, self.left, self.right] if x is not None]
 
     def rot(self):
         return Tile(self.id, np.rot90(self.data))
@@ -22,20 +21,31 @@ class Tile:
     def flip(self):
         return Tile(self.id, np.flipud(self.data))
 
-    def deg(self):
-        return len(self.used_ids())
+    def expand_neighbours(self, tiles):
+        if self.neighbours_expanded:
+            return
+
+        for other in tiles:
+            self.add_to_neighbours(other)
+            if self.deg == 4:
+                break
+        self.neighbours_expanded = True
 
     def add_to_neighbours(self, other):
-        if self.id == other.id or other.id in self.used_ids():
+        if self.id == other.id:
             return
-        if self.is_other_up(other):
+        if not self.up and self.is_other_up(other):
             self.up = other
-        if self.is_other_down(other):
+            self.deg += 1
+        if not self.down and self.is_other_down(other):
             self.down = other
-        if self.is_other_left(other):
+            self.deg += 1
+        if not self.left and self.is_other_left(other):
             self.left = other
-        if self.is_other_right(other):
+            self.deg += 1
+        if not self.right and self.is_other_right(other):
             self.right = other
+            self.deg += 1
 
     def is_other_up(self, other):
         return all(self.data[0] == other.data[-1])
@@ -67,23 +77,28 @@ for tile_txt in tiles_txt:
 
 # calculate neighbours
 for a in tiles:
-    for b in tiles:
-        a.add_to_neighbours(b)
-print("Part1", prod(set([x.id for x in tiles if x.deg() == 2])))
+    a.expand_neighbours(tiles)
+    if a.deg == 2 and a.left is None and a.up is None:
+        break  # we have a startpoint and now can expand further
 
 
 # Init gamefield
-curr = [x for x in tiles if x.deg() == 2 and x.up is None and x.left is None][0]
+curr = [x for x in tiles if x.deg == 2 and x.up is None and x.left is None][0]
 rows = []
 while curr is not None:
+    curr.expand_neighbours(tiles)
     temp = curr
     row = []
     while temp is not None:
+        temp.expand_neighbours(tiles)
         row.append(temp.data[1:-1, 1:-1])
         temp = temp.right
     rows.append(np.hstack(row))
     curr = curr.down
 grid = np.vstack(rows)
+
+
+print("Part1", prod(set([x.id for x in tiles if x.deg == 2])))
 
 
 # Init sea monster
