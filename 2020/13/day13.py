@@ -1,7 +1,9 @@
+import sys
 from pathlib import Path
 from math import prod
 
-data = Path("input.txt").read_text().splitlines()
+path = sys.argv[1] if len(sys.argv) >= 2 else "input.txt"
+data = Path(path).read_text().splitlines()
 
 # Part 1
 target = int(data[0])

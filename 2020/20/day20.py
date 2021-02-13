@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 from math import prod
 from pathlib import Path
@@ -61,7 +62,8 @@ class Tile:
 
 
 # read tiles
-tiles_txt = Path("input.txt").read_text().split("\n\n")
+path = sys.argv[1] if len(sys.argv) >= 2 else "input.txt"
+tiles_txt = Path(path).read_text().split("\n\n")
 tiles = []
 for tile_txt in tiles_txt:
     id = int(tile_txt.splitlines()[0].split(" ")[1][:-1])
