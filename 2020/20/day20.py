@@ -5,16 +5,15 @@ from pathlib import Path
 
 
 class Tile:
-    up = None
-    down = None
-    left = None
-    right = None
-    deg = 0
-    neighbours_expanded = False
-
     def __init__(self, id, data):
         self.id = id
         self.data = data
+        self.up = None
+        self.down = None
+        self.left = None
+        self.right = None
+        self.deg = 0
+        self.neighbours_expanded = False
 
     def rot(self):
         return Tile(self.id, np.rot90(self.data))
@@ -110,7 +109,7 @@ monster = """
  #  #  #  #  #  #   """
 monster = np.array([list(x) for x in monster.splitlines()[1:]])
 monster_height, monster_width = monster.shape
-monster_size = (monster == '#').sum()
+monster_size = (monster == "#").sum()
 
 
 # Find sea monsters
@@ -119,8 +118,8 @@ for _ in range(2):
     for _ in range(4):
         for row in range(grid.shape[0]):
             for col in range(grid.shape[0]):
-                window = grid[row:row + monster_height,
-                              col:col + monster_width]
+                window = grid[row: row + monster_height,
+                              col: col + monster_width]
                 if window.shape != (monster_height, monster_width):
                     continue
                 compare = window == monster
@@ -128,4 +127,4 @@ for _ in range(2):
                     monster_cnt += 1
         grid = np.rot90(grid)
     grid = np.flipud(grid)
-print("Part2:", (grid == '#').sum() - monster_cnt * monster_size)
+print("Part2:", (grid == "#").sum() - monster_cnt * monster_size)
