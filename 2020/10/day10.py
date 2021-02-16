@@ -1,8 +1,12 @@
 import sys
+import argparse
 from pathlib import Path
 
-path = sys.argv[1] if len(sys.argv) >= 2 else "input.txt"
-data = [int(x) for x in Path(path).read_text().splitlines()]
+parser = argparse.ArgumentParser()
+parser.add_argument("--input", required=False, default="input.txt")
+args, _ = parser.parse_known_args()
+
+data = [int(x) for x in Path(args.input).read_text().splitlines()]
 data.append(0)
 data.sort()
 data.append(data[-1] + 3)
@@ -24,6 +28,8 @@ print("Part1:", part1)
 
 
 lookup = {}
+
+
 def arrangements(pos):
     if pos in lookup:
         return lookup[pos]
