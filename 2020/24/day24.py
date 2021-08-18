@@ -9,12 +9,12 @@ flatten = itertools.chain.from_iterable
 BLACK, WHITE = 1, 0
 
 mapping = {
-    "e": 2j,
-    "se": 1j + 1,
-    "sw": -1j + 1,
-    "w": -2j,
-    "nw": -1j -1,
-    "ne": 1j -1
+    "e": 1 + 0j,
+    "se": 0 + 1j,
+    "sw": -1 + 1j,
+    "w": -1 + 0j,
+    "nw": 0 - 1j,
+    "ne": 1 - 1j
 }
 
 def place_tile(moves):
