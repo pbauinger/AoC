@@ -1,2 +1,2 @@
 # aoc
-Advent of code stuff
+Advent of code stuff.
