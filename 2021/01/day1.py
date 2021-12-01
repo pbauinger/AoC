@@ -17,8 +17,8 @@ def part1(arr):
     return cnt
 
 def part2(arr):
-    prev = float("-inf")
-    cnt = -1
+    prev = float("inf")
+    cnt = 0
     for curr in mit.windowed(arr, 3):
         if sum(curr) > prev:
             cnt += 1
