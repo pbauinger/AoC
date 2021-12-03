@@ -16,11 +16,7 @@ def calcuateCnt(arr, bit):
 
 
 def filterData(arr, bit, value):
-    result = []
-    for x in arr:
-        if x[bit] == value:
-            result.append(x)
-    return result
+    return [x for x in arr if x[bit] == value]
 
 
 # Part1
