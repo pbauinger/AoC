@@ -8,9 +8,11 @@ def apply_num_to_boards(boards, markings, n):
                 marking[idx] = True
 
 
-def get_winners(markings):
+def get_winners(markings, ignore):
     winners = set()
     for board_idx, marking in enumerate(markings):
+        if(board_idx in ignore):
+            continue
         rows = [0] * 5
         columns = [0] * 5
         for idx, marked in enumerate(marking):
@@ -19,6 +21,7 @@ def get_winners(markings):
                 columns[idx % 5] += 1
         if any(x == 5 for x in rows) or any(x == 5 for x in columns):
             winners.add(board_idx)
+            continue
     return winners
 
 
@@ -35,18 +38,18 @@ for board_raw in input[1:]:
     boards.append(sum([row.split() for row in board_raw.split("\n")], []))
     markings.append([False] * 25)
 
-prev_winners = set()
+winners = set()
 for num in numbers:
     apply_num_to_boards(boards, markings, num)
-    winners = get_winners(markings)
-    if winners:
-        new_winners = winners - prev_winners
-        if len(winners) == 1 and len(new_winners) == 1:
-            w_idx = new_winners.pop()
+    new_winners = get_winners(markings, winners)
+    
+    if new_winners:
+        winners |= new_winners
+        if len(winners) == 1:
+            w_idx = (list(new_winners))[0]
             print("Part1", sum_unmarked(boards[w_idx], markings[w_idx]) * int(num))
 
-        prev_winners = winners
         if len(winners) == len(boards):
-            w_idx = new_winners.pop()
+            w_idx = (list(new_winners))[0]
             print("Part2", sum_unmarked(boards[w_idx], markings[w_idx]) * int(num))
             break
