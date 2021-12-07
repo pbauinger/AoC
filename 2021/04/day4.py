@@ -19,7 +19,7 @@ def get_winners(markings, ignore):
             if marked:
                 rows[idx // 5] += 1
                 columns[idx % 5] += 1
-        if any(x == 5 for x in rows) or any(x == 5 for x in columns):
+        if 5 in rows or 5 in columns:
             winners.add(board_idx)
             continue
     return winners

@@ -3,10 +3,10 @@ from functools import cache
 
 
 @cache
-def calcFish(fish, curr, remaining):
+def calc_fish(fish, curr, remaining):
     total = 1
     for day in range(curr + fish, remaining + 1, 7):
-        total += calcFish(9, day, remaining)
+        total += calc_fish(9, day, remaining)
     return total
 
 
@@ -14,7 +14,7 @@ def calc(days):
     data = [int(x) for x in Path("real.in").read_text().split(",")]
     total = 0
     for fish in data:
-        total += calcFish(fish, 1, days)
+        total += calc_fish(fish, 1, days)
     return total
 
 

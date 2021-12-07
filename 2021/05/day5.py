@@ -38,7 +38,7 @@ def solve(diagonals=False, threshold=2):
                     grid[(x1, y1)] += 1
                     x1 += 1
                     y1 -= 1
-    return len([x for x in grid.values() if x >= threshold])
+    return sum(x >= threshold for x in grid.values())
 
 
 print("Part1", solve())
