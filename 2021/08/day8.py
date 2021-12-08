@@ -11,10 +11,8 @@ for x in data:
     digit_map = {}
     signal_map = {}
 
-    idx = -1
-    while signals:
-        idx = (idx + 1) % len(signals)
-        signal = signals[idx]
+    # Sort by len to reach 1 and 4 first. With 1 and 4 we can deduce the rest 
+    for signal in sorted(signals, key=len):
         digit = -1
 
         if len(signal) == 2: digit = 1
@@ -22,12 +20,12 @@ for x in data:
         elif len(signal) == 4: digit = 4
         elif len(signal) == 7: digit = 8
 
-        elif len(signal) == 5 and len(digit_map) >= 4:
+        elif len(signal) == 5:
             if set(digit_map[1]) <= set(signal): digit = 3
             elif len(set(signal) & set(digit_map[4])) == 3: digit = 5
             else: digit = 2
 
-        elif len(signal) == 6 and len(digit_map) >= 4:
+        elif len(signal) == 6:
             if not set(digit_map[1]) <= set(signal): digit = 6
             elif set(digit_map[4]) <= set(signal): digit = 9
             else: digit = 0
@@ -35,7 +33,6 @@ for x in data:
         if digit != -1:
             digit_map[digit] = signal
             signal_map[signal] = digit
-            signals.remove(signal)
 
     mul = 1000
     for res in result:
