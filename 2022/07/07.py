@@ -9,30 +9,23 @@ input = Path(path).read_text().splitlines()
 filesystem = {
     '/': [0, {}]
 }
-location_pointer = filesystem['/']
-curr_location = ['/']
-
-def update_location_pointer():
-    pointer = filesystem[curr_location[0]]
-    for location in curr_location[1:]:
-        pointer = pointer[1][location]
-    return pointer
-
+curr_location = filesystem['/']
+location_stack = []
 for line in input:
     parts = line.split()
     if (line[0] == '$'):
         if (parts[1] == 'cd'):
             if (parts[2] == '/'):
-                curr_location = ["/"]
+                curr_location = filesystem['/']
             elif (parts[2] == '..'):
-                curr_location.pop()
+                curr_location = location_stack.pop()
             else:
-                curr_location.append(parts[2])
-            location_pointer = update_location_pointer()
+                location_stack.append(curr_location)
+                curr_location = curr_location[1][parts[2]]
     elif (parts[0] == 'dir'):
-        location_pointer[1][parts[1]] = [0, {}]
+        curr_location[1][parts[1]] = [0, {}]
     else:
-        location_pointer[1][parts[1]] = [int(parts[0]), {}]
+        curr_location[1][parts[1]] = [int(parts[0]), {}]
 
 total = 0
 def calculate_size(curr):
