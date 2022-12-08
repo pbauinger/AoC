@@ -1,6 +1,9 @@
+import sys
 from pathlib import Path
 
-input = Path("input.txt").read_text()
+path = 'test.in' if len(sys.argv) >= 2 and sys.argv[1] in (
+    't', 'test') else 'real.in'
+input = Path(path).read_text()
 pairs = [x.split(',') for x in input.splitlines()]
 
 

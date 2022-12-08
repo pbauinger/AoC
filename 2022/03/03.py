@@ -1,12 +1,15 @@
+import sys
 from pathlib import Path
 
-input = Path("input.txt").read_text()
+path = 'test.in' if len(sys.argv) >= 2 and sys.argv[1] in (
+    't', 'test') else 'real.in'
+input = Path(path).read_text()
 
 
 def calc_prio(r):
     if r.isupper():
         return ord(r) - ord('A') + 27
-    else:       
+    else:
         return ord(r) - ord('a') + 1
 
 
@@ -20,15 +23,11 @@ for rucksack in rucksacks:
 
 print("Part1", prios)
 
-i = 0
 prios = 0
-while i < len(rucksacks):
-    r1 = rucksacks[i]
-    r2 = rucksacks[i+1]
-    r3 = rucksacks[i+2]
+for i in range(len(rucksacks))[::3]:
+    r1, r2, r3 = rucksacks[i:i+3]
 
     overlap = (set(r1) & set(r2) & set(r3)).pop()
     prios += calc_prio(overlap)
-    i+=3
 
 print("Part2", prios)
