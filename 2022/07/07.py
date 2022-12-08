@@ -6,17 +6,15 @@ path = 'test.in' if len(sys.argv) >= 2 and sys.argv[1] in (
 input = Path(path).read_text().splitlines()
 
 
-filesystem = {
-    '/': [0, {}]
-}
-curr_location = filesystem['/']
+root = [0, {}]
+curr_location = root
 location_stack = []
 for line in input:
     parts = line.split()
     if (line[0] == '$'):
         if (parts[1] == 'cd'):
             if (parts[2] == '/'):
-                curr_location = filesystem['/']
+                curr_location = root
             elif (parts[2] == '..'):
                 curr_location = location_stack.pop()
             else:
@@ -30,20 +28,18 @@ for line in input:
 total = 0
 def calculate_size(curr):
     global total
-    size = curr[0]
+
     for child in curr[1].values():
-        size += calculate_size(child)
+        curr[0] += calculate_size(child)
 
-    curr[0] = size
-    if (size <= 100_000 and curr[1]):
-        total += size
-    return size
+    if (curr[0] <= 100_000 and curr[1]):
+        total += curr[0]
+    return curr[0]
 
-
-calculate_size(filesystem['/'])
+calculate_size(root)
 print('Part1', total)
 
-free = 70000000 - filesystem['/'][0]
+free = 70000000 - root[0]
 needed = 30000000 - free
 min = float('inf')
 def find_smallest(curr):
@@ -51,10 +47,8 @@ def find_smallest(curr):
     size = curr[0]
     if curr[1] and size >= needed and size < min:
         min = size
-
     for child in curr[1].values():
         find_smallest(child)
 
-
-find_smallest(filesystem['/'])
+find_smallest(root)
 print('Part2', min)
